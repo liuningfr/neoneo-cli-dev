@@ -5,7 +5,7 @@
   "author": "",
   "homepage": "",
   "license": "ISC",
-  "main": "lib/core.js",
+  "main": "lib/index.js",
   "bin": {
     "neoneo-cli-dev": "bin/index.js"
   },
@@ -21,5 +21,10 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@neoneo-cli-dev/utils": "file:../../utils/utils",
+    "import-local": "^3.1.0",
+    "npmlog": "^6.0.2"
   }
 }
