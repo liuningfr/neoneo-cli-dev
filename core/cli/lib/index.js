@@ -2,13 +2,31 @@
 
 module.exports = core;
 
-const pkg = require('../package.json');
+const semver = require('semver');
+const colors = require('colors/safe');
+
 const log = require('@neoneo-cli-dev/log');
 const utils = require('@neoneo-cli-dev/utils');
 
+const pkg = require('../package.json');
+const constant = require('./const');
+
 function core() {
-    console.log('start to exec core');
-    checkPkgVersion();
+    try {
+        log.info('start to exec core');
+        checkPkgVersion();
+        checkNodeVersion();
+    } catch(e) {
+        log.error(e.message);
+    }
+}
+
+function checkNodeVersion() {
+    const currentVersion =  process.version;
+    const lowestVersion = constant.LOWEST_NODE_VERSION;
+    if (!semver.gte(currentVersion, lowestVersion)) {
+        throw new Error(colors.red(`neoneo-cli-dev 需要安装 v${lowestVersion} 以上版本的 Node.js`));
+    }
 }
 
 function checkPkgVersion() {

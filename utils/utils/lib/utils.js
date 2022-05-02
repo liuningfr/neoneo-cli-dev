@@ -2,6 +2,8 @@
 
 module.exports = utils;
 
+const log = require('@neoneo-cli-dev/log');
+
 function utils() {
-    console.log('running utils');  
+    log.info('start to exec utils');  
 }

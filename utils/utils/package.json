@@ -18,5 +18,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@neoneo-cli-dev/log": "file:../log"
   }
 }
