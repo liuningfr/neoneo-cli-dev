@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-// const utils = require('@neoneo-cli-dev/utils');
-// utils();
-// console.log('hello neoneo-lib-dev!!');
-
 const importLocal = require('import-local');
 
 if (importLocal(__filename)) {

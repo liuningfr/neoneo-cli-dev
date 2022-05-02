@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@neoneo-cli-dev/utils": "file:../../utils/utils",
+    "@neoneo-cli-dev/log": "file:../../utils/log",
     "import-local": "^3.1.0",
     "npmlog": "^6.0.2"
   }
