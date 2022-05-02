@@ -16,10 +16,18 @@ function core() {
         log.info('start to exec core');
         checkPkgVersion();
         checkNodeVersion();
+        checkRoot();
+        utils();
     } catch(e) {
         log.error(e.message);
     }
 }
+
+function checkRoot() {
+    const rootCheck = require('root-check');
+    rootCheck();
+    log.notice('您的系统用户权限:', process.getuid());
+};
 
 function checkNodeVersion() {
     const currentVersion =  process.version;
@@ -30,8 +38,5 @@ function checkNodeVersion() {
 }
 
 function checkPkgVersion() {
-    // console.log(pkg.version);
-    // log.success('test', 'success!');
     log.notice('您正在使用的版本:', pkg.version);
-    utils();
 }
