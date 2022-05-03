@@ -4,6 +4,7 @@ module.exports = core;
 
 const semver = require('semver');
 const colors = require('colors/safe');
+const pathExists = require('path-exists');
 
 const log = require('@neoneo-cli-dev/log');
 const utils = require('@neoneo-cli-dev/utils');
@@ -17,10 +18,19 @@ function core() {
         checkPkgVersion();
         checkNodeVersion();
         checkRoot();
+        checkUserHome();
         utils();
     } catch(e) {
         log.error(e.message);
     }
+}
+
+function checkUserHome() {
+    const userHome = require('os').homedir();
+    if (!userHome || !pathExists(userHome)) {
+        throw new Error(colors.red('当前用户主目录不存在'));
+    }
+    log.notice('您的用户主目录:', userHome);
 }
 
 function checkRoot() {
