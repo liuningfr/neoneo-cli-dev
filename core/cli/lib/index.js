@@ -2,6 +2,7 @@
 
 module.exports = core;
 
+const path = require('path');
 const semver = require('semver');
 const colors = require('colors/safe');
 const pathExists = require('path-exists');
@@ -13,6 +14,8 @@ const pkg = require('../package.json');
 const constant = require('./const');
 
 let args;
+let config;
+let userHome;
 
 function core() {
     try {
@@ -22,11 +25,37 @@ function core() {
         checkRoot();
         checkUserHome();
         checkInputArgs();
+        checkEnv();
         log.verbose('debug', 'test debug');
         utils();
     } catch(e) {
         log.error(e.message);
     }
+}
+
+async function checkEnv() {
+    const dotenv = require('dotenv');
+    const dotenvPath = path.resolve(userHome, '.env');
+    if (await pathExists(dotenvPath)) {
+        config = dotenv.config({
+            path: dotenvPath,
+        });
+    }
+
+    createDefaultConfig();
+    log.verbose('环境变量', process.env.CLI_HOME_PATH);
+}
+
+function createDefaultConfig() {
+    const cliConfig = {
+        home: userHome,
+    };
+    if (process.env.CLI_HOME) {
+        cliConfig.cliHome = path.join(userHome, process.env.CLI_HOME);
+    } else {
+        cliConfig.cliHome = path.join(userHome, constant.DEFAULT_CLI_HOME);
+    }
+    process.env.CLI_HOME_PATH = cliConfig.cliHome;
 }
 
 function checkInputArgs() {
@@ -44,9 +73,9 @@ function checkArgs() {
     log.level = process.env.LOG_LEVEL;
 }
 
-function checkUserHome() {
-    const userHome = require('os').homedir();
-    if (!userHome || !pathExists(userHome)) {
+async function checkUserHome() {
+    userHome = require('os').homedir();
+    if (!userHome || !await pathExists(userHome)) {
         throw new Error(colors.red('当前用户主目录不存在'));
     }
     log.notice('您的用户主目录:', userHome);
