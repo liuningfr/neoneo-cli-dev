@@ -13,6 +13,9 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/liuningfr/neoneo-cli-dev.git"
@@ -24,9 +27,10 @@
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
   },
   "dependencies": {
-    "@neoneo-cli-dev/log": "file:../log",
+    "@neoneo-cli-dev/log": "^1.0.21",
     "axios": "^0.27.2",
     "semver": "^7.3.7",
     "url-join": "4.0.1"
-  }
+  },
+  "gitHead": "6f75e2958a8f93c12c1d9d1b5989e154611f2351"
 }
