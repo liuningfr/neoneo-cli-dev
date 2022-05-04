@@ -17,19 +17,29 @@ let args;
 let config;
 let userHome;
 
-function core() {
+async function core() {
     try {
         log.info('start to exec core');
         checkPkgVersion();
         checkNodeVersion();
         checkRoot();
-        checkUserHome();
+        await checkUserHome();
         checkInputArgs();
-        checkEnv();
-        log.verbose('debug', 'test debug');
+        await checkEnv();
+        await checkGlobalUpdate();
         utils();
     } catch(e) {
         log.error(e.message);
+    }
+}
+
+async function checkGlobalUpdate() {
+    const currentVersion = pkg.version;
+    const npmName = pkg.name;
+    const { getNpmSemverVersion } = require('@neoneo-cli-dev/get-npm-info');
+    const latestVersion = await getNpmSemverVersion(currentVersion, npmName);
+    if (latestVersion && semver.gt(latestVersion, currentVersion)) {
+        log.warn('更新提示', `请手动更新 ${npmName} 到最新版本 ${latestVersion}`);
     }
 }
 

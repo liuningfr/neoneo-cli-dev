@@ -1,0 +1,32 @@
+{
+  "name": "@neoneo-cli-dev/get-npm-info",
+  "version": "1.0.21",
+  "description": "get npm info",
+  "author": "liuning <liuning@kuaishou.com>",
+  "homepage": "https://github.com/liuningfr/neoneo-cli-dev#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liuningfr/neoneo-cli-dev.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
+  },
+  "dependencies": {
+    "@neoneo-cli-dev/log": "file:../log",
+    "axios": "^0.27.2",
+    "semver": "^7.3.7",
+    "url-join": "4.0.1"
+  }
+}
