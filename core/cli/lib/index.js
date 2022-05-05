@@ -6,6 +6,7 @@ const path = require('path');
 const semver = require('semver');
 const colors = require('colors/safe');
 const pathExists = require('path-exists');
+const commander = require('commander');
 
 const log = require('@neoneo-cli-dev/log');
 const utils = require('@neoneo-cli-dev/utils');
@@ -17,6 +18,8 @@ let args;
 let config;
 let userHome;
 
+const program = new commander.Command();
+
 async function core() {
     try {
         log.info('start to exec core');
@@ -24,12 +27,45 @@ async function core() {
         checkNodeVersion();
         checkRoot();
         await checkUserHome();
-        checkInputArgs();
+        // checkInputArgs();
         await checkEnv();
         await checkGlobalUpdate();
+        registerCommand();
         utils();
     } catch(e) {
         log.error(e.message);
+    }
+}
+
+function registerCommand() {
+    program
+        .name(Object.keys(pkg.bin)[0])
+        .usage('<command> [options]')
+        .version(pkg.version)
+        .option('-d, --debug', '开启调试模式', false);
+
+    program.on('option:debug', () => {
+        if (program.opts().debug) {
+            process.env.LOG_LEVEL = 'verbose';
+        } else {
+            process.env.LOG_LEVEL = 'info';
+        }
+        log.level = process.env.LOG_LEVEL;
+    });
+
+    program.on('command:*', (obj) =>{
+        const availableCommands = program.commands.map((cmd) => cmd.name());
+        console.log(colors.red(`未知的命令:${obj[0]}`));
+        if (availableCommands.length > 0) {
+            console.log(colors.red(`可用的命令:${availableCommands.join(',')}`));
+        }
+    });
+
+    program.parse(process.argv);
+
+    if (program.args && program.args.length < 1) {
+        program.outputHelp();
+        console.log();
     }
 }
 
