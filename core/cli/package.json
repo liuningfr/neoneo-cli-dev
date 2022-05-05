@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@neoneo-cli-dev/get-npm-info": "^1.0.23",
+    "@neoneo-cli-dev/init": "file:../../commands/init",
     "@neoneo-cli-dev/log": "^1.0.21",
     "@neoneo-cli-dev/utils": "^1.0.21",
     "colors": "^1.4.0",

@@ -10,6 +10,7 @@ const commander = require('commander');
 
 const log = require('@neoneo-cli-dev/log');
 const utils = require('@neoneo-cli-dev/utils');
+const init = require('@neoneo-cli-dev/init');
 
 const pkg = require('../package.json');
 const constant = require('./const');
@@ -43,6 +44,11 @@ function registerCommand() {
         .usage('<command> [options]')
         .version(pkg.version)
         .option('-d, --debug', '开启调试模式', false);
+    
+    program
+        .command('init [projectName]')
+        .option('-f, --force', '强制初始化项目')
+        .action(init);
 
     program.on('option:debug', () => {
         if (program.opts().debug) {
