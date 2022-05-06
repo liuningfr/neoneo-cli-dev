@@ -15,24 +15,14 @@ const init = require('@neoneo-cli-dev/init');
 const pkg = require('../package.json');
 const constant = require('./const');
 
-let args;
-let config;
 let userHome;
 
 const program = new commander.Command();
 
 async function core() {
     try {
-        log.info('start to exec core');
-        checkPkgVersion();
-        checkNodeVersion();
-        checkRoot();
-        await checkUserHome();
-        // checkInputArgs();
-        await checkEnv();
-        await checkGlobalUpdate();
+        await prepare();
         registerCommand();
-        utils();
     } catch(e) {
         log.error(e.message);
     }
@@ -43,7 +33,8 @@ function registerCommand() {
         .name(Object.keys(pkg.bin)[0])
         .usage('<command> [options]')
         .version(pkg.version)
-        .option('-d, --debug', '开启调试模式', false);
+        .option('-d, --debug', '开启调试模式', false)
+        .option('-tp, --targetPath <targetPath>', '指定本地调试文件路径', '');
     
     program
         .command('init [projectName]')
@@ -57,6 +48,10 @@ function registerCommand() {
             process.env.LOG_LEVEL = 'info';
         }
         log.level = process.env.LOG_LEVEL;
+    });
+
+    program.on('option:targetPath', () => {
+        process.env.CLI_TARGET_PATH = program.opts().targetPath;
     });
 
     program.on('command:*', (obj) =>{
@@ -75,6 +70,17 @@ function registerCommand() {
     }
 }
 
+async function prepare() {
+    checkPkgVersion();
+    checkNodeVersion();
+    checkRoot();
+    await checkUserHome();
+    // checkInputArgs();
+    await checkEnv();
+    await checkGlobalUpdate();
+    utils();
+}
+
 async function checkGlobalUpdate() {
     const currentVersion = pkg.version;
     const npmName = pkg.name;
@@ -89,13 +95,13 @@ async function checkEnv() {
     const dotenv = require('dotenv');
     const dotenvPath = path.resolve(userHome, '.env');
     if (await pathExists(dotenvPath)) {
-        config = dotenv.config({
+        dotenv.config({
             path: dotenvPath,
         });
     }
 
     createDefaultConfig();
-    log.verbose('环境变量', process.env.CLI_HOME_PATH);
+    // log.verbose('环境变量', process.env.CLI_HOME_PATH);
 }
 
 function createDefaultConfig() {
@@ -110,20 +116,20 @@ function createDefaultConfig() {
     process.env.CLI_HOME_PATH = cliConfig.cliHome;
 }
 
-function checkInputArgs() {
-    const minimist = require('minimist');
-    args = minimist(process.argv.slice(2))
-    checkArgs();
-}
+// function checkInputArgs() {
+//     const minimist = require('minimist');
+//     args = minimist(process.argv.slice(2))
+//     checkArgs();
+// }
 
-function checkArgs() {
-    if (args.debug) {
-        process.env.LOG_LEVEL = 'verbose';
-    } else {
-        process.env.LOG_LEVEL = 'info';
-    }
-    log.level = process.env.LOG_LEVEL;
-}
+// function checkArgs() {
+//     if (args.debug) {
+//         process.env.LOG_LEVEL = 'verbose';
+//     } else {
+//         process.env.LOG_LEVEL = 'info';
+//     }
+//     log.level = process.env.LOG_LEVEL;
+// }
 
 async function checkUserHome() {
     userHome = require('os').homedir();
