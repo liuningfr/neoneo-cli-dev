@@ -1,0 +1,29 @@
+{
+  "name": "@neoneo-cli-dev/exec",
+  "version": "1.0.24",
+  "description": "neoneo-cli-dev exec",
+  "author": "liuning <liuning@kuaishou.com>",
+  "homepage": "https://github.com/liuningfr/neoneo-cli-dev#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liuningfr/neoneo-cli-dev.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
+  }
+}
