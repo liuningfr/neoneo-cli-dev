@@ -1,7 +1,7 @@
 {
-  "name": "@neoneo-cli-dev/exec",
+  "name": "@neoneo-cli-dev/package",
   "version": "1.0.25",
-  "description": "neoneo-cli-dev exec",
+  "description": "neoneo-cli-dev package",
   "author": "liuning <liuning@kuaishou.com>",
   "homepage": "https://github.com/liuningfr/neoneo-cli-dev#readme",
   "license": "ISC",
@@ -25,8 +25,5 @@
   },
   "bugs": {
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
-  },
-  "dependencies": {
-    "@neoneo-cli-dev/package": "file:../../models/package"
   }
 }
