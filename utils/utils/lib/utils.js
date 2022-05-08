@@ -1,9 +1,9 @@
 'use strict';
 
-module.exports = utils;
+module.exports = {
+    isObject
+};
 
-const log = require('@neoneo-cli-dev/log');
-
-function utils() {
-    log.info('start to exec utils');  
+function isObject(o) {
+    return Object.prototype.toString.call(o) === '[object Object]';  
 }

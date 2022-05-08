@@ -9,7 +9,6 @@ const pathExists = require('path-exists');
 const commander = require('commander');
 
 const log = require('@neoneo-cli-dev/log');
-const utils = require('@neoneo-cli-dev/utils');
 const init = require('@neoneo-cli-dev/init');
 const exec = require('@neoneo-cli-dev/exec');
 
@@ -79,7 +78,6 @@ async function prepare() {
     // checkInputArgs();
     await checkEnv();
     await checkGlobalUpdate();
-    utils();
 }
 
 async function checkGlobalUpdate() {
@@ -102,7 +100,6 @@ async function checkEnv() {
     }
 
     createDefaultConfig();
-    // log.verbose('环境变量', process.env.CLI_HOME_PATH);
 }
 
 function createDefaultConfig() {

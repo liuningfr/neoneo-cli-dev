@@ -25,5 +25,8 @@
   },
   "bugs": {
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
+  },
+  "dependencies": {
+    "@neoneo-cli-dev/utils": "file:../../utils/utils"
   }
 }
