@@ -1,7 +1,7 @@
 {
-  "name": "@neoneo-cli-dev/package",
+  "name": "@neoneo-cli-dev/format-path",
   "version": "1.0.26",
-  "description": "neoneo-cli-dev package",
+  "description": "neoneo-cli-dev format-path",
   "author": "liuning <liuning@kuaishou.com>",
   "homepage": "https://github.com/liuningfr/neoneo-cli-dev#readme",
   "license": "ISC",
@@ -25,10 +25,5 @@
   },
   "bugs": {
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
-  },
-  "dependencies": {
-    "@neoneo-cli-dev/format-path": "file:../../utils/format-path",
-    "@neoneo-cli-dev/utils": "file:../../utils/utils",
-    "pkg-dir": "5.0.0"
   }
 }
