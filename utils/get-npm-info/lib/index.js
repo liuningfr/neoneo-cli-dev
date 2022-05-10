@@ -4,6 +4,7 @@ module.exports = {
     getNpmInfo,
     getNpmVersions,
     getNpmSemverVersion,
+    getDefaultRegistry,
 };
 
 const axios = require('axios');

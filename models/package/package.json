@@ -28,7 +28,9 @@
   },
   "dependencies": {
     "@neoneo-cli-dev/format-path": "file:../../utils/format-path",
+    "@neoneo-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "@neoneo-cli-dev/utils": "file:../../utils/utils",
+    "npminstall": "^6.1.0",
     "pkg-dir": "5.0.0"
   }
 }

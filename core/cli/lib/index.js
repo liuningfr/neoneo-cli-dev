@@ -9,7 +9,6 @@ const pathExists = require('path-exists');
 const commander = require('commander');
 
 const log = require('@neoneo-cli-dev/log');
-const init = require('@neoneo-cli-dev/init');
 const exec = require('@neoneo-cli-dev/exec');
 
 const pkg = require('../package.json');
