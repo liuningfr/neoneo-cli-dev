@@ -38,9 +38,11 @@ async function exec() {
             packageName,
             packageVersion,
         });
-        if (pkg.exists()) {
+        if (await pkg.exists()) {
+            log.notice('开始更新');
             pkg.update();
         } else {
+            log.notice('开始安装');
             await pkg.install();
         }
     } else {
