@@ -7,6 +7,7 @@ const formatPath = require('@neoneo-cli-dev/format-path');
 const npminstall = require('npminstall');
 const { getDefaultRegistry, getLatestVersion } = require('@neoneo-cli-dev/get-npm-info');
 const pathExists = require('path-exists').sync;
+const fse = require('fs-extra');
 class Package {
     constructor(options) {
         if (!options) {
@@ -23,6 +24,9 @@ class Package {
     }
 
     async prepare() {
+        if (this.storeDir && !pathExists(this.storeDir)) {
+            fse.mkdirpSync(this.storeDir);
+        }
         if (this.packageVersion === 'latest') {
             this.packageVersion = await getLatestVersion(this.packageName);
         }
@@ -30,6 +34,10 @@ class Package {
 
     get cacheFilePath() {
         return path.resolve(this.storeDir, `_${this.cacheFilePathPrefix}@${this.packageVersion}@${this.packageName}`);
+    }
+
+    getSpecificCacheFilePath(version) {
+        return path.resolve(this.storeDir, `_${this.cacheFilePathPrefix}@${version}@${this.packageName}`);
     }
 
     async exists() {
@@ -54,17 +62,40 @@ class Package {
         });
     }
 
-    update() {}
+    async update() {
+        await this.prepare();
+        const latestPackageVersion = await getLatestVersion(this.packageName);
+        const latestFilePath = this.getSpecificCacheFilePath(latestPackageVersion);
+        if (!pathExists(latestFilePath)) {
+            await npminstall({
+                root: this.targetPath,
+                storeDir: this.storeDir,
+                registry: getDefaultRegistry(),
+                pkgs: [{
+                    name: this.packageName,
+                    version: latestPackageVersion,
+                }],
+            });
+            this.packageVersion = latestPackageVersion;
+        }
+    }
 
     getRootFilePath() {
-        const dir = pkgDir(this.targetPath);
-        if (dir) {
-            const pkgFile = require(path.resolve(dir, 'package.json'));
-            if (pkgFile && pkgFile.main) {
-                return formatPath(path.resolve(dir, pkgFile.main));
+        function _getRootFilePath(p) {
+            const dir = pkgDir(p);
+            if (dir) {
+                const pkgFile = require(path.resolve(dir, 'package.json'));
+                if (pkgFile && pkgFile.main) {
+                    return formatPath(path.resolve(dir, pkgFile.main));
+                }
             }
+            return null;
         }
-        return null;
+        if (this.storeDir) {
+            return _getRootFilePath(this.cacheFilePath);
+        } else {
+            return _getRootFilePath(this.targetPath);
+        }
     }
 }
 
