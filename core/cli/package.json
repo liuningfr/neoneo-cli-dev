@@ -1,6 +1,6 @@
 {
   "name": "@neoneo-cli-dev/core",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "neoneo-cli-dev core",
   "author": "",
   "homepage": "",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@neoneo-cli-dev/exec": "file:../exec",
-    "@neoneo-cli-dev/get-npm-info": "^1.0.23",
+    "@neoneo-cli-dev/get-npm-info": "^1.0.28",
     "@neoneo-cli-dev/init": "file:../../commands/init",
     "@neoneo-cli-dev/log": "^1.0.21",
     "@neoneo-cli-dev/utils": "^1.0.26",
