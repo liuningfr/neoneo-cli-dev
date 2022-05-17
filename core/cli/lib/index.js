@@ -71,7 +71,7 @@ function registerCommand() {
 
 async function prepare() {
     checkPkgVersion();
-    checkNodeVersion();
+    // checkNodeVersion();
     checkRoot();
     await checkUserHome();
     // checkInputArgs();
@@ -142,13 +142,13 @@ function checkRoot() {
     log.notice('您的系统用户权限:', process.getuid());
 };
 
-function checkNodeVersion() {
-    const currentVersion =  process.version;
-    const lowestVersion = constant.LOWEST_NODE_VERSION;
-    if (!semver.gte(currentVersion, lowestVersion)) {
-        throw new Error(colors.red(`neoneo-cli-dev 需要安装 v${lowestVersion} 以上版本的 Node.js`));
-    }
-}
+// function checkNodeVersion() {
+//     const currentVersion =  process.version;
+//     const lowestVersion = constant.LOWEST_NODE_VERSION;
+//     if (!semver.gte(currentVersion, lowestVersion)) {
+//         throw new Error(colors.red(`neoneo-cli-dev 需要安装 v${lowestVersion} 以上版本的 Node.js`));
+//     }
+// }
 
 function checkPkgVersion() {
     log.notice('您正在使用的版本:', pkg.version);

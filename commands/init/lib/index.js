@@ -1,7 +1,14 @@
 'use strict';
 
-module.exports = init;
+const Command = require('@neoneo-cli-dev/command');
 
-function init(projectName, options) {
-    console.log(projectName, options, process.env.CLI_TARGET_PATH);
+class InitCommand extends Command {
+
 }
+
+function init(argv) {
+    return new InitCommand(argv);
+}
+
+module.exports = init;
+module.exports.InitCommand = InitCommand;
