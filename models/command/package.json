@@ -1,6 +1,6 @@
 {
   "name": "@neoneo-cli-dev/command",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "neoneo-cli-dev command",
   "author": "liuning <liuning@kuaishou.com>",
   "homepage": "https://github.com/liuningfr/neoneo-cli-dev#readme",
@@ -27,8 +27,8 @@
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
   },
   "dependencies": {
+    "@neoneo-cli-dev/log": "file:../../utils/log",
     "colors": "^1.4.0",
-    "semver": "^7.3.7",
-    "@neoneo-cli-dev/log": "file:../../utils/log"
+    "semver": "^7.3.7"
   }
 }
