@@ -12,7 +12,7 @@ class InitCommand extends Command {
     }
 
     exec() {
-        console.log('exec');
+        console.log('exec start');
     }
 }
 
