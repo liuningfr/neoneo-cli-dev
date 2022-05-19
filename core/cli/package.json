@@ -24,10 +24,10 @@
   },
   "dependencies": {
     "@neoneo-cli-dev/exec": "file:../exec",
-    "@neoneo-cli-dev/get-npm-info": "^1.0.28",
+    "@neoneo-cli-dev/get-npm-info": "^1.0.31",
     "@neoneo-cli-dev/init": "file:../../commands/init",
-    "@neoneo-cli-dev/log": "^1.0.21",
-    "@neoneo-cli-dev/utils": "^1.0.26",
+    "@neoneo-cli-dev/log": "^1.0.31",
+    "@neoneo-cli-dev/utils": "^1.0.31",
     "colors": "^1.4.0",
     "commander": "^9.2.0",
     "dotenv": "^16.0.0",

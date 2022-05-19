@@ -27,7 +27,7 @@
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
   },
   "dependencies": {
-    "@neoneo-cli-dev/log": "^1.0.21",
+    "@neoneo-cli-dev/log": "^1.0.31",
     "axios": "^0.27.2",
     "semver": "^7.3.7",
     "url-join": "4.0.1"
