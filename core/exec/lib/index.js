@@ -5,6 +5,7 @@ module.exports = exec;
 const Package = require('@neoneo-cli-dev/package');
 const log = require('@neoneo-cli-dev/log');
 const path = require('path');
+const cp = require('child_process');
 
 const SETTINGS = {
     init: '@neoneo-cli-dev/init',
@@ -55,7 +56,34 @@ async function exec() {
     const rootFile = pkg.getRootFilePath();
     if(rootFile) {
         try {
-            require(rootFile).call(null, Array.from(arguments));
+            const args = Array.from(arguments);
+            const cmd = args[args.length - 1];
+            const o = Object.create(null);
+            Object.keys(cmd).forEach(key => {
+                if(cmd.hasOwnProperty(key) && !key.startsWith('_') && key !== 'parent') {
+                    o[key] = cmd[key];
+                }
+            });
+            args[args.length - 1] = o;
+            const code = `require('${rootFile}').call(null, ${JSON.stringify(args)})`;
+            const child = cp.spawn('node', ['-e', code], {
+                cwd: process.cwd(),
+                stdio: 'inherit',
+            });
+            child.on('error', e => {
+                log.error(e.message);
+                process.exit(1);
+            });
+            child.on('exit', e => {
+                log.verbose('init执行成功', e);
+                process.exit(e);
+            });
+            // child.stdout.on('data', (chunk) => {
+            //     console.log(chunk.toString());
+            // });
+            // child.stderr.on('data', (chunk) => {
+            //     console.log(chunk.toString());
+            // });
         } catch(e) {
             log.error(e.message)
         }
