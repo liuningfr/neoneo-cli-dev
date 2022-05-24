@@ -41,7 +41,7 @@ async function exec() {
         });
         if (await pkg.exists()) {
             log.notice('开始更新');
-            pkg.update();
+            await pkg.update();
         } else {
             log.notice('开始安装');
             await pkg.install();
