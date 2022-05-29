@@ -7,6 +7,8 @@ const fse = require('fs-extra');
 const Command = require('@neoneo-cli-dev/command');
 const log = require('@neoneo-cli-dev/log');
 
+const TYPE_PROJECT = 'project';
+const TYPE_COMPONENT = 'component';
 class InitCommand extends Command {
     init() {
         this.projectName = this._argv[0] || '';
@@ -54,9 +56,57 @@ class InitCommand extends Command {
                     fse.emptyDirSync(localPath);
                 }
             }
-        } else {
+        }
+        return await this.getProjectInfo();
+    }
+
+    async getProjectInfo() {
+        const projectInfo = {};
+
+        const { type } = await inquirer.prompt({
+            type: 'list',
+            name: 'type',
+            default: TYPE_PROJECT,
+            message: '请选择初始化类型',
+            choices: [{
+                name: '项目',
+                value: TYPE_PROJECT,
+            }, {
+                name: '组件',
+                value: TYPE_COMPONENT,
+            }],
+        });
+        log.verbose(type);
+        
+        if (type === TYPE_PROJECT) {
+            const o = await inquirer.prompt([{
+                type: 'input',
+                name: 'projectName',
+                message: '请输入项目名称',
+                default: '',
+                validate: (v) => {
+                    return typeof v === 'string';
+                },
+                filter: (v) => {
+                    return v;
+                },
+            }, {
+                type: 'input',
+                name: 'projectVersion',
+                message: '请输入项目版本号',
+                default: '',
+                validate: (v) => {
+                    return typeof v === 'string';
+                },
+                filter: (v) => {
+                    return v;
+                },
+            }]);
+            console.log(o);
+        } else if (type === TYPE_COMPONENT) {
 
         }
+        return projectInfo;
     }
 
     isDirEmpty(localPath) {
