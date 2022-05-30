@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const inquirer = require('inquirer');
 const fse = require('fs-extra');
+const semver = require('semver');
 const Command = require('@neoneo-cli-dev/command');
 const log = require('@neoneo-cli-dev/log');
 
@@ -84,8 +85,15 @@ class InitCommand extends Command {
                 name: 'projectName',
                 message: '请输入项目名称',
                 default: '',
-                validate: (v) => {
-                    return typeof v === 'string';
+                validate: function (v) {
+                    const done = this.async();
+                    setTimeout(function() {
+                    if (!/^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v)) {
+                        done('请输入合法的项目名称');
+                        return;
+                    }
+                    done(null, true);
+                    }, 0);
                 },
                 filter: (v) => {
                     return v;
@@ -94,12 +102,23 @@ class InitCommand extends Command {
                 type: 'input',
                 name: 'projectVersion',
                 message: '请输入项目版本号',
-                default: '',
-                validate: (v) => {
-                    return typeof v === 'string';
+                default: '1.0.0',
+                validate: function (v) {
+                    const done = this.async();
+                    setTimeout(function() {
+                    if (!semver.valid(v)) {
+                        done('请输入合法的版本号');
+                        return;
+                    }
+                    done(null, true);
+                    }, 0);
                 },
                 filter: (v) => {
-                    return v;
+                    if (!!semver.valid(v)) {
+                        return semver.valid(v);
+                    } else {
+                        return v;
+                    }
                 },
             }]);
             console.log(o);
