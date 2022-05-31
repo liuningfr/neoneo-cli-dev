@@ -20,14 +20,19 @@ class InitCommand extends Command {
 
     async exec() {
         try {
-            const ret = await this.prepare();
-            if (ret) {
-
+            const projectInfo = await this.prepare();
+            if (projectInfo) {
+                log.verbose('projectInfo', projectInfo);
+                this.downloadTemplate();
             }
             
         } catch (e) {
            log.error(e.message); 
         }
+    }
+
+    downloadTemplate() {
+
     }
 
     async prepare() {
@@ -62,7 +67,7 @@ class InitCommand extends Command {
     }
 
     async getProjectInfo() {
-        const projectInfo = {};
+        let projectInfo = {};
 
         const { type } = await inquirer.prompt({
             type: 'list',
@@ -80,7 +85,7 @@ class InitCommand extends Command {
         log.verbose(type);
         
         if (type === TYPE_PROJECT) {
-            const o = await inquirer.prompt([{
+            const project = await inquirer.prompt([{
                 type: 'input',
                 name: 'projectName',
                 message: '请输入项目名称',
@@ -121,7 +126,10 @@ class InitCommand extends Command {
                     }
                 },
             }]);
-            console.log(o);
+            projectInfo = {
+                type,
+                ...project,
+            };
         } else if (type === TYPE_COMPONENT) {
 
         }
