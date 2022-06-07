@@ -7,6 +7,7 @@ const fse = require('fs-extra');
 const semver = require('semver');
 const Command = require('@neoneo-cli-dev/command');
 const log = require('@neoneo-cli-dev/log');
+const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
@@ -23,6 +24,7 @@ class InitCommand extends Command {
             const projectInfo = await this.prepare();
             if (projectInfo) {
                 log.verbose('projectInfo', projectInfo);
+                this.projectInfo = projectInfo;
                 this.downloadTemplate();
             }
             
@@ -32,10 +34,16 @@ class InitCommand extends Command {
     }
 
     downloadTemplate() {
-
+        console.log(this.template);
+        console.log(this.projectInfo);
     }
 
     async prepare() {
+        const template = await getProjectTemplate();
+        if (!template || template.length === 0) {
+            throw new Error('项目模板不存在');
+        }
+        this.template = template;
         // or path.resolve('.')
         const localPath = process.cwd();
         if (!this.isDirEmpty(localPath)) {
