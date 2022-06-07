@@ -1,6 +1,6 @@
 {
   "name": "@neoneo-cli-dev/init",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "neoneo-cli-dev init",
   "author": "liuning <liuning@kuaishou.com>",
   "homepage": "https://github.com/liuningfr/neoneo-cli-dev#readme",
@@ -27,9 +27,9 @@
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
   },
   "dependencies": {
-    "@neoneo-cli-dev/command": "^1.0.31",
-    "@neoneo-cli-dev/log": "^1.0.31",
-    "@neoneo-cli-dev/request": "^1.0.31",
+    "@neoneo-cli-dev/command": "^1.0.33",
+    "@neoneo-cli-dev/log": "^1.0.33",
+    "@neoneo-cli-dev/request": "^1.0.33",
     "fs-extra": "^10.1.0",
     "inquirer": "^8.2.4",
     "semver": "^7.3.7"

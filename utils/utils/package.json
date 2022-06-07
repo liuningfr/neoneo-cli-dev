@@ -1,6 +1,6 @@
 {
   "name": "@neoneo-cli-dev/utils",
-  "version": "1.0.31",
+  "version": "1.0.33",
   "description": "neoneo-cli-dev utils",
   "author": "",
   "homepage": "",
@@ -20,6 +20,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@neoneo-cli-dev/log": "^1.0.31"
+    "@neoneo-cli-dev/log": "^1.0.33"
   }
 }
