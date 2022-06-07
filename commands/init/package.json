@@ -27,9 +27,9 @@
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
   },
   "dependencies": {
-    "@neoneo-cli-dev/command": "file:../../models/command",
-    "@neoneo-cli-dev/log": "file:../../utils/log",
-    "@neoneo-cli-dev/request": "file:../../utils/request",
+    "@neoneo-cli-dev/command": "^1.0.31",
+    "@neoneo-cli-dev/log": "^1.0.31",
+    "@neoneo-cli-dev/request": "^1.0.31",
     "fs-extra": "^10.1.0",
     "inquirer": "^8.2.4",
     "semver": "^7.3.7"

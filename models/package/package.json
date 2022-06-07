@@ -27,9 +27,9 @@
     "url": "https://github.com/liuningfr/neoneo-cli-dev/issues"
   },
   "dependencies": {
-    "@neoneo-cli-dev/format-path": "file:../../utils/format-path",
-    "@neoneo-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
-    "@neoneo-cli-dev/utils": "file:../../utils/utils",
+    "@neoneo-cli-dev/format-path": "^1.0.31",
+    "@neoneo-cli-dev/get-npm-info": "^1.0.31",
+    "@neoneo-cli-dev/utils": "^1.0.31",
     "fs-extra": "^10.1.0",
     "npminstall": "^6.1.0",
     "path-exists": "4.0.0",

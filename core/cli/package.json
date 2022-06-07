@@ -23,9 +23,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@neoneo-cli-dev/exec": "file:../exec",
+    "@neoneo-cli-dev/exec": "^1.0.31",
     "@neoneo-cli-dev/get-npm-info": "^1.0.31",
-    "@neoneo-cli-dev/init": "file:../../commands/init",
+    "@neoneo-cli-dev/init": "^1.0.31",
     "@neoneo-cli-dev/log": "^1.0.31",
     "@neoneo-cli-dev/utils": "^1.0.31",
     "colors": "^1.4.0",

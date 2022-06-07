@@ -20,6 +20,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@neoneo-cli-dev/log": "file:../log"
+    "@neoneo-cli-dev/log": "^1.0.31"
   }
 }
