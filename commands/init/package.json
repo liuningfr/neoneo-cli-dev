@@ -29,6 +29,7 @@
   "dependencies": {
     "@neoneo-cli-dev/command": "^1.0.33",
     "@neoneo-cli-dev/log": "^1.0.33",
+    "@neoneo-cli-dev/package": "^1.0.33",
     "@neoneo-cli-dev/request": "^1.0.33",
     "fs-extra": "^10.1.0",
     "inquirer": "^8.2.4",

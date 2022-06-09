@@ -7,10 +7,13 @@ const fse = require('fs-extra');
 const semver = require('semver');
 const Command = require('@neoneo-cli-dev/command');
 const log = require('@neoneo-cli-dev/log');
+const Package = require('@neoneo-cli-dev/package');
 const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
+
+let userHome;
 class InitCommand extends Command {
     init() {
         this.projectName = this._argv[0] || '';
@@ -25,7 +28,7 @@ class InitCommand extends Command {
             if (projectInfo) {
                 log.verbose('projectInfo', projectInfo);
                 this.projectInfo = projectInfo;
-                this.downloadTemplate();
+                await this.downloadTemplate();
             }
             
         } catch (e) {
@@ -33,9 +36,27 @@ class InitCommand extends Command {
         }
     }
 
-    downloadTemplate() {
-        console.log(this.template);
-        console.log(this.projectInfo);
+    async downloadTemplate() {
+        const { projectTemplate } = this.projectInfo;
+        const { npmName, version } = this.template.find(item => item.npmName === projectTemplate);
+
+        userHome = require('os').homedir();
+        const targetPath = path.resolve(userHome, '.neoneo-cli-dev', 'template');
+        const storeDir = path.resolve(targetPath, 'node_modules');
+
+        const templateNpm = new Package({
+            targetPath,
+            storeDir,
+            packageName: npmName,
+            packageVersion: version,
+        });
+        if (await templateNpm.exists()) {
+            log.notice('开始更新template');
+            await templateNpm.update();
+        } else {
+            log.notice('开始安装template');
+            await templateNpm.install();
+        }
     }
 
     async prepare() {
