@@ -133,6 +133,11 @@ class InitCommand extends Command {
                         return v;
                     }
                 },
+            }, {
+                type: 'list',
+                name: 'projectTemplate',
+                message: '请选择项目模板',
+                choices: this.createTemplateChoice(),
             }]);
             projectInfo = {
                 type,
@@ -150,6 +155,13 @@ class InitCommand extends Command {
             !file.startsWith('.') && ['node_modules'].indexOf(file) < 0
         ));
         return !fileList || fileList.length === 0;
+    }
+
+    createTemplateChoice() {
+        return this.template.map(item => ({
+            name: item.name,
+            value: item.npmName,
+        }));
     }
 }
 
