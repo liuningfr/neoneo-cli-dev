@@ -31,7 +31,6 @@ class InitCommand extends Command {
                 this.projectInfo = projectInfo;
                 await this.downloadTemplate();
             }
-            
         } catch (e) {
            log.error(e.message); 
         }
@@ -52,7 +51,7 @@ class InitCommand extends Command {
             packageVersion: version,
         });
         if (await templateNpm.exists()) {
-            const spinner = spinnerStart('正在下载模板...');
+            const spinner = spinnerStart('正在更新模板...');
             await sleep();
             await templateNpm.update();
             spinner.stop(true);
@@ -60,9 +59,14 @@ class InitCommand extends Command {
         } else {
             const spinner = spinnerStart('正在下载模板...');
             await sleep();
-            await templateNpm.install();
-            spinner.stop(true);
-            log.success('下载模板成功');
+            try {
+                await templateNpm.install();
+                log.success('下载模板成功');
+            } catch (err) {
+                throw(err);
+            } finally {
+                spinner.stop(true);
+            }
         }
     }
 

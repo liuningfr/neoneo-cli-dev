@@ -63,6 +63,6 @@ async function getLatestVersion(npmName, registry) {
     return null;
 }
 
-function getDefaultRegistry(isOrigin = false) {
+function getDefaultRegistry(isOrigin = true) {
     return isOrigin ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org';
 }
