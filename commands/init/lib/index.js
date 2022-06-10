@@ -8,6 +8,7 @@ const semver = require('semver');
 const Command = require('@neoneo-cli-dev/command');
 const log = require('@neoneo-cli-dev/log');
 const Package = require('@neoneo-cli-dev/package');
+const { spinnerStart, sleep } = require('@neoneo-cli-dev/utils');
 const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
@@ -26,7 +27,7 @@ class InitCommand extends Command {
         try {
             const projectInfo = await this.prepare();
             if (projectInfo) {
-                log.verbose('projectInfo', projectInfo);
+                console.log('projectInfo', projectInfo);
                 this.projectInfo = projectInfo;
                 await this.downloadTemplate();
             }
@@ -51,11 +52,17 @@ class InitCommand extends Command {
             packageVersion: version,
         });
         if (await templateNpm.exists()) {
-            log.notice('开始更新template');
+            const spinner = spinnerStart('正在下载模板...');
+            await sleep();
             await templateNpm.update();
+            spinner.stop(true);
+            log.success('更新模板成功');
         } else {
-            log.notice('开始安装template');
+            const spinner = spinnerStart('正在下载模板...');
+            await sleep();
             await templateNpm.install();
+            spinner.stop(true);
+            log.success('下载模板成功');
         }
     }
 

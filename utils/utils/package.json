@@ -20,6 +20,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@neoneo-cli-dev/log": "^1.0.33"
+    "@neoneo-cli-dev/log": "^1.0.33",
+    "cli-spinner": "^0.2.10"
   }
 }
