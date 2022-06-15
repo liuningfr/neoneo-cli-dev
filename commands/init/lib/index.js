@@ -13,6 +13,8 @@ const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
+const TEMPLATE_TYPE_NORMAL = 'normal';
+const TEMPLATE_TYPE_CUSTOM = 'custom';
 
 let userHome;
 class InitCommand extends Command {
@@ -30,15 +32,44 @@ class InitCommand extends Command {
                 console.log('projectInfo', projectInfo);
                 this.projectInfo = projectInfo;
                 await this.downloadTemplate();
+
+                await this.installTemplate();
             }
         } catch (e) {
            log.error(e.message); 
         }
     }
 
+    async installTemplate() {
+        if (this.templateInfo) {
+            if (!this.templateInfo.type) {
+                this.templateInfo.type = TEMPLATE_TYPE_NORMAL;
+            }
+            if (this.templateInfo.type === TEMPLATE_TYPE_NORMAL) {
+                await this.installNormalTemplate();
+            } else if (this.templateInfo.type === TEMPLATE_TYPE_CUSTOM) {
+                await this.installCustomTemplate();
+            } else {
+                throw new Error('项目模板类型无法识别');
+            }
+        } else {
+            throw new Error('项目模板信息不存在');
+        }
+    }
+
+    async installNormalTemplate () {
+
+    }
+
+    async installCustomTemplate () {
+
+    }
+
     async downloadTemplate() {
         const { projectTemplate } = this.projectInfo;
-        const { npmName, version } = this.template.find(item => item.npmName === projectTemplate);
+        const templateInfo = this.template.find(item => item.npmName === projectTemplate);
+        const { npmName, version } = templateInfo;
+        this.templateInfo = templateInfo;
 
         userHome = require('os').homedir();
         const targetPath = path.resolve(userHome, '.neoneo-cli-dev', 'template');
