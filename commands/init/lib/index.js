@@ -58,7 +58,20 @@ class InitCommand extends Command {
     }
 
     async installNormalTemplate () {
-        console.log('安装标准模板');
+        const spinner = spinnerStart('正在安装模板...');
+        await sleep();
+        try {
+            const templatePath = path.resolve(this.templateNpm.cacheFilePath, 'template');
+            const targetPath = process.cwd();
+            fse.ensureDirSync(templatePath);
+            fse.ensureDirSync(targetPath);
+            fse.copySync(templatePath, targetPath);
+        } catch(e) {
+            throw e;
+        } finally {
+            spinner.stop(true);
+            log.success('模板安装成功');
+        }
     }
 
     async installCustomTemplate () {
@@ -87,12 +100,14 @@ class InitCommand extends Command {
             await templateNpm.update();
             spinner.stop(true);
             log.success('更新模板成功');
+            this.templateNpm = templateNpm;
         } else {
             const spinner = spinnerStart('正在下载模板...');
             await sleep();
             try {
                 await templateNpm.install();
                 log.success('下载模板成功');
+                this.templateNpm = templateNpm;
             } catch (err) {
                 throw(err);
             } finally {
