@@ -58,11 +58,11 @@ class InitCommand extends Command {
     }
 
     async installNormalTemplate () {
-
+        console.log('安装标准模板');
     }
 
     async installCustomTemplate () {
-
+        console.log('安装自定义模板');
     }
 
     async downloadTemplate() {
