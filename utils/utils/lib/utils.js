@@ -4,6 +4,7 @@ module.exports = {
     isObject,
     spinnerStart,
     sleep,
+    execAsync,
 };
 
 function isObject(o) {
@@ -21,4 +22,16 @@ function spinnerStart(msg, spinnerString = '|/-\\') {
 
 function sleep (timeout = 1000) {
     return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+function execAsync (cmd, args, options) {
+    return new Promise((resolve, reject) => {
+        const p = require('child_process').spawn(cmd, args, options);
+        p.on('error', e => {
+            reject(e);
+        });
+        p.on('exit', e => {
+            resolve(e);
+        });
+    });
 }

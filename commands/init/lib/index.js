@@ -8,7 +8,7 @@ const semver = require('semver');
 const Command = require('@neoneo-cli-dev/command');
 const log = require('@neoneo-cli-dev/log');
 const Package = require('@neoneo-cli-dev/package');
-const { spinnerStart, sleep } = require('@neoneo-cli-dev/utils');
+const { spinnerStart, sleep, execAsync } = require('@neoneo-cli-dev/utils');
 const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
@@ -71,6 +71,33 @@ class InitCommand extends Command {
         } finally {
             spinner.stop(true);
             log.success('模板安装成功');
+        }
+        const { installCommand, startCommand } = this.templateInfo;
+        if (installCommand && installCommand.length > 0) {
+            const installCmd = installCommand.split(' ');
+            const cmd = installCmd[0];
+            const args = installCmd.splice(1);
+
+            const installRet = await execAsync(cmd, args, {
+                cwd: process.cwd(),
+                stdio: 'inherit',
+            });
+            if (installRet !== 0) {
+                throw new Error('依赖安装过程失败');
+            }
+            if (startCommand) {
+                const startCmd = startCommand.split(' ');
+                const cmd = startCmd[0];
+                const args = startCmd.splice(1);
+
+                const startRet = await execAsync(cmd, args, {
+                    cwd: process.cwd(),
+                    stdio: 'inherit',
+                });
+                if (startRet !== 0) {
+                    throw new Error('项目启动过程失败');
+                }
+            }
         }
     }
 
