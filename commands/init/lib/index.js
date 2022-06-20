@@ -254,6 +254,9 @@ class InitCommand extends Command {
         } else if (type === TYPE_COMPONENT) {
 
         }
+        if (projectInfo.projectName) {
+            projectInfo.className = require('kebab-case')(projectInfo.projectName).replace(/^-/, '');
+        }
         return projectInfo;
     }
 
