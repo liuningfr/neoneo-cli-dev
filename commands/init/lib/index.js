@@ -15,6 +15,7 @@ const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
 const TEMPLATE_TYPE_NORMAL = 'normal';
 const TEMPLATE_TYPE_CUSTOM = 'custom';
+const WHITE_COMMAND = [ 'npm', 'cnpm' ];
 
 let userHome;
 class InitCommand extends Command {
@@ -57,6 +58,32 @@ class InitCommand extends Command {
         }
     }
 
+    checkCommand(cmd) {
+        if (WHITE_COMMAND.includes(cmd)) {
+            return cmd;
+        }
+        return null;
+    }
+
+    async execCommand(command, errMsg) {
+        let ret;
+        const cmdArray = command.split(' ');
+        const cmd = this.checkCommand(cmdArray[0]);
+        if  (!cmd) {
+            throw new Error('命令不合法:' + command);
+        }
+        const args = cmdArray.splice(1);
+
+        ret = await execAsync(cmd, args, {
+            cwd: process.cwd(),
+            stdio: 'inherit',
+        });
+        if (ret !== 0) {
+            throw new Error(errMsg);
+        }
+        return ret;
+    }
+
     async installNormalTemplate () {
         const spinner = spinnerStart('正在安装模板...');
         await sleep();
@@ -73,32 +100,8 @@ class InitCommand extends Command {
             log.success('模板安装成功');
         }
         const { installCommand, startCommand } = this.templateInfo;
-        if (installCommand && installCommand.length > 0) {
-            const installCmd = installCommand.split(' ');
-            const cmd = installCmd[0];
-            const args = installCmd.splice(1);
-
-            const installRet = await execAsync(cmd, args, {
-                cwd: process.cwd(),
-                stdio: 'inherit',
-            });
-            if (installRet !== 0) {
-                throw new Error('依赖安装过程失败');
-            }
-            if (startCommand) {
-                const startCmd = startCommand.split(' ');
-                const cmd = startCmd[0];
-                const args = startCmd.splice(1);
-
-                const startRet = await execAsync(cmd, args, {
-                    cwd: process.cwd(),
-                    stdio: 'inherit',
-                });
-                if (startRet !== 0) {
-                    throw new Error('项目启动过程失败');
-                }
-            }
-        }
+        await this.execCommand(installCommand, '依赖安装过程失败');
+        await this.execCommand(startCommand, '项目启动过程失败');
     }
 
     async installCustomTemplate () {
