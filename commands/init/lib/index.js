@@ -84,6 +84,20 @@ class InitCommand extends Command {
         return ret;
     }
 
+    ejsRender(ignore) {
+        return new Promise((resolve, reject) => {
+            require('glob')('**', {
+                cwd: process.cwd(),
+                ignore,
+            }, (err, files) => {
+                if (err) {
+                    reject(err);
+                }
+                console.log(files);
+            });
+        });
+    }
+
     async installNormalTemplate () {
         const spinner = spinnerStart('正在安装模板...');
         await sleep();
@@ -99,6 +113,9 @@ class InitCommand extends Command {
             spinner.stop(true);
             log.success('模板安装成功');
         }
+        const ignore = ['node_modules/**'];
+        await this.ejsRender(ignore);
+
         const { installCommand, startCommand } = this.templateInfo;
         await this.execCommand(installCommand, '依赖安装过程失败');
         await this.execCommand(startCommand, '项目启动过程失败');
