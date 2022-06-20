@@ -5,6 +5,8 @@ const path = require('path');
 const inquirer = require('inquirer');
 const fse = require('fs-extra');
 const semver = require('semver');
+const ejs = require('ejs');
+const glob = require('glob');
 const Command = require('@neoneo-cli-dev/command');
 const log = require('@neoneo-cli-dev/log');
 const Package = require('@neoneo-cli-dev/package');
@@ -37,7 +39,10 @@ class InitCommand extends Command {
                 await this.installTemplate();
             }
         } catch (e) {
-           log.error(e.message); 
+            log.error(e.message);
+            if (process.env.LOG_LEVEL === 'verbose') {
+                console.log(e);
+            }
         }
     }
 
@@ -84,16 +89,37 @@ class InitCommand extends Command {
         return ret;
     }
 
-    ejsRender(ignore) {
+    ejsRender(options) {
         return new Promise((resolve, reject) => {
-            require('glob')('**', {
-                cwd: process.cwd(),
-                ignore,
+            const dir = process.cwd();
+            glob('**', {
+                cwd: dir,
+                ignore: options.ignore || [],
+                nodir: true,
             }, (err, files) => {
                 if (err) {
                     reject(err);
                 }
-                console.log(files);
+                Promise.all(files.map(file => {
+                    const filePath = path.resolve(dir, file);
+                    return new Promise((resolve1, reject1) => {
+                        ejs.renderFile(filePath, {
+                            className: this.projectInfo.className,
+                            version: this.projectInfo.projectVersion,
+                        }, {}, (err, result) => {
+                            if (err) {
+                                reject1(err);
+                            } else {
+                                fse.writeFileSync(filePath, result);
+                                resolve1(result);
+                            }
+                        });
+                    });
+                })).then(() => {
+                    resolve();
+                }).catch(err => {
+                    reject(err);
+                });
             });
         });
     }
@@ -111,14 +137,17 @@ class InitCommand extends Command {
             throw e;
         } finally {
             spinner.stop(true);
+            log.verbose(JSON.stringify(this.templateNpm));
             log.success('模板安装成功');
         }
-        const ignore = ['node_modules/**'];
-        await this.ejsRender(ignore);
+        const ignore = ['node_modules/**', 'public/**'];
+        await this.ejsRender({
+            ignore,
+        });
 
         const { installCommand, startCommand } = this.templateInfo;
-        await this.execCommand(installCommand, '依赖安装过程失败');
-        await this.execCommand(startCommand, '项目启动过程失败');
+        await this.execCommand(installCommand, '依赖安装失败');
+        await this.execCommand(startCommand, '启动命令失败');
     }
 
     async installCustomTemplate () {
