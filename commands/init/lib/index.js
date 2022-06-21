@@ -229,8 +229,15 @@ class InitCommand extends Command {
     }
 
     async getProjectInfo() {
+        function isValidName(v) {
+            return /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v)
+        }
         let projectInfo = {};
-
+        let isProjectNameValid = false;
+        if (isValidName(this.projectName)) {
+            isProjectNameValid = true;
+            projectInfo.projectName = this.projectName;
+        }
         const { type } = await inquirer.prompt({
             type: 'list',
             name: 'type',
@@ -247,7 +254,7 @@ class InitCommand extends Command {
         log.verbose(type);
         
         if (type === TYPE_PROJECT) {
-            const project = await inquirer.prompt([{
+            const projectNamePrompt = {
                 type: 'input',
                 name: 'projectName',
                 message: '请输入项目名称',
@@ -255,7 +262,7 @@ class InitCommand extends Command {
                 validate: function (v) {
                     const done = this.async();
                     setTimeout(function() {
-                    if (!/^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v)) {
+                    if (!isValidName(v)) {
                         done('请输入合法的项目名称');
                         return;
                     }
@@ -265,7 +272,12 @@ class InitCommand extends Command {
                 filter: (v) => {
                     return v;
                 },
-            }, {
+            };
+            const projectPrompt = [];
+            if (!isProjectNameValid) {
+                projectPrompt.push(projectNamePrompt);
+            }
+            projectPrompt.push({
                 type: 'input',
                 name: 'projectVersion',
                 message: '请输入项目版本号',
@@ -292,8 +304,10 @@ class InitCommand extends Command {
                 name: 'projectTemplate',
                 message: '请选择项目模板',
                 choices: this.createTemplateChoice(),
-            }]);
+            });
+            const project = await inquirer.prompt(projectPrompt);
             projectInfo = {
+                ...projectInfo,
                 type,
                 ...project,
             };
