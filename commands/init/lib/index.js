@@ -32,7 +32,7 @@ class InitCommand extends Command {
         try {
             const projectInfo = await this.prepare();
             if (projectInfo) {
-                console.log('projectInfo', projectInfo);
+                log.verbose('projectInfo', JSON.stringify(projectInfo));
                 this.projectInfo = projectInfo;
                 await this.downloadTemplate();
 
@@ -137,7 +137,7 @@ class InitCommand extends Command {
             throw e;
         } finally {
             spinner.stop(true);
-            log.verbose(JSON.stringify(this.templateNpm));
+            log.verbose('templateNpm', JSON.stringify(this.templateNpm));
             log.success('模板安装成功');
         }
         const ignore = ['node_modules/**', 'public/**'];
