@@ -140,7 +140,7 @@ class InitCommand extends Command {
             log.verbose('templateNpm', JSON.stringify(this.templateNpm));
             log.success('模板安装成功');
         }
-        const ignore = ['node_modules/**', 'public/**'];
+        const ignore = ['node_modules/**', 'public/**', '*.png'];
         await this.ejsRender({
             ignore,
         });
