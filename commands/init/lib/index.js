@@ -140,7 +140,8 @@ class InitCommand extends Command {
             log.verbose('templateNpm', JSON.stringify(this.templateNpm));
             log.success('模板安装成功');
         }
-        const ignore = ['node_modules/**', 'public/**', '*.png'];
+        const templateIgnore = this.templateInfo.ignore || [];
+        const ignore = ['**/node_modules/**', ...templateIgnore];
         await this.ejsRender({
             ignore,
         });
@@ -252,7 +253,8 @@ class InitCommand extends Command {
             }],
         });
         log.verbose(type);
-        
+        this.template = this.template.filter(item => item.tag.includes(type));
+        console.log(this.template);
         if (type === TYPE_PROJECT) {
             const projectNamePrompt = {
                 type: 'input',
