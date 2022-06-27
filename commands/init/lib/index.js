@@ -106,6 +106,7 @@ class InitCommand extends Command {
                         ejs.renderFile(filePath, {
                             className: this.projectInfo.className,
                             version: this.projectInfo.projectVersion,
+                            description: this.projectInfo.componentDescription,
                         }, {}, (err, result) => {
                             if (err) {
                                 reject1(err);
@@ -252,61 +253,62 @@ class InitCommand extends Command {
                 value: TYPE_COMPONENT,
             }],
         });
-        log.verbose(type);
         this.template = this.template.filter(item => item.tag.includes(type));
         console.log(this.template);
-        if (type === TYPE_PROJECT) {
-            const projectNamePrompt = {
-                type: 'input',
-                name: 'projectName',
-                message: '请输入项目名称',
-                default: '',
-                validate: function (v) {
-                    const done = this.async();
-                    setTimeout(function() {
-                    if (!isValidName(v)) {
-                        done('请输入合法的项目名称');
-                        return;
-                    }
-                    done(null, true);
-                    }, 0);
-                },
-                filter: (v) => {
+
+        const title = type === TYPE_PROJECT ? '项目' : '组件';
+        const projectNamePrompt = {
+            type: 'input',
+            name: 'projectName',
+            message: `请输入${title}名称`,
+            default: '',
+            validate: function (v) {
+                const done = this.async();
+                setTimeout(function() {
+                if (!isValidName(v)) {
+                    done(`请输入合法的${title}名称`);
+                    return;
+                }
+                done(null, true);
+                }, 0);
+            },
+            filter: (v) => {
+                return v;
+            },
+        };
+        const projectPrompt = [];
+        if (!isProjectNameValid) {
+            projectPrompt.push(projectNamePrompt);
+        }
+        projectPrompt.push({
+            type: 'input',
+            name: 'projectVersion',
+            message: `请输入${title}版本号`,
+            default: '1.0.0',
+            validate: function (v) {
+                const done = this.async();
+                setTimeout(function() {
+                if (!semver.valid(v)) {
+                    done('请输入合法的版本号');
+                    return;
+                }
+                done(null, true);
+                }, 0);
+            },
+            filter: (v) => {
+                if (!!semver.valid(v)) {
+                    return semver.valid(v);
+                } else {
                     return v;
-                },
-            };
-            const projectPrompt = [];
-            if (!isProjectNameValid) {
-                projectPrompt.push(projectNamePrompt);
-            }
-            projectPrompt.push({
-                type: 'input',
-                name: 'projectVersion',
-                message: '请输入项目版本号',
-                default: '1.0.0',
-                validate: function (v) {
-                    const done = this.async();
-                    setTimeout(function() {
-                    if (!semver.valid(v)) {
-                        done('请输入合法的版本号');
-                        return;
-                    }
-                    done(null, true);
-                    }, 0);
-                },
-                filter: (v) => {
-                    if (!!semver.valid(v)) {
-                        return semver.valid(v);
-                    } else {
-                        return v;
-                    }
-                },
-            }, {
-                type: 'list',
-                name: 'projectTemplate',
-                message: '请选择项目模板',
-                choices: this.createTemplateChoice(),
-            });
+                }
+            },
+        }, {
+            type: 'list',
+            name: 'projectTemplate',
+            message: `请选择${title}模板`,
+            choices: this.createTemplateChoice(),
+        });
+        if (type === TYPE_PROJECT) {
             const project = await inquirer.prompt(projectPrompt);
             projectInfo = {
                 ...projectInfo,
@@ -314,7 +316,29 @@ class InitCommand extends Command {
                 ...project,
             };
         } else if (type === TYPE_COMPONENT) {
-
+            const descriptionPrompt = {
+                type: 'input',
+                name: 'componentDescription',
+                message: '请输入组件描述',
+                default: '',
+                validate: function (v) {
+                    const done = this.async();
+                    setTimeout(function() {
+                    if (!v) {
+                        done('请输入组件描述');
+                        return;
+                    }
+                    done(null, true);
+                    }, 0);
+                },
+            };
+            projectPrompt.push(descriptionPrompt);
+            const project = await inquirer.prompt(projectPrompt);
+            projectInfo = {
+                ...projectInfo,
+                type,
+                ...project,
+            };
         }
         if (projectInfo.projectName) {
             projectInfo.className = require('kebab-case')(projectInfo.projectName).replace(/^-/, '');
