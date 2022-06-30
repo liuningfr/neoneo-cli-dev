@@ -153,7 +153,14 @@ class InitCommand extends Command {
     }
 
     async installCustomTemplate () {
-        console.log('安装自定义模板');
+        if (await this.templateNpm.exists()) {
+            const rootFile = this.templateNpm.getRootFilePath();
+            if (fs.existsSync(rootFile)) {
+                log.notice('开始执行自定义模板');
+            } else {
+                throw new Error('自定义模板入口文件不存在');
+            }
+        }
     }
 
     async downloadTemplate() {
@@ -254,7 +261,6 @@ class InitCommand extends Command {
             }],
         });
         this.template = this.template.filter(item => item.tag.includes(type));
-        console.log(this.template);
 
         const title = type === TYPE_PROJECT ? '项目' : '组件';
         const projectNamePrompt = {
