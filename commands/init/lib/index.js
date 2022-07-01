@@ -157,6 +157,16 @@ class InitCommand extends Command {
             const rootFile = this.templateNpm.getRootFilePath();
             if (fs.existsSync(rootFile)) {
                 log.notice('开始执行自定义模板');
+                const options = {
+                    ...this.templateInfo,
+                    cwd: process.cwd(),
+                };
+                const code = `require('${rootFile}')(${JSON.stringify(options)})`;
+                await execAsync('node', ['-e', code], {
+                    cwd: process.cwd(),
+                    stdio: 'inherit',
+                });
+                log.notice('自定义模板安装成功');
             } else {
                 throw new Error('自定义模板入口文件不存在');
             }
