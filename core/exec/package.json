@@ -1,6 +1,6 @@
 {
   "name": "@neoneo-cli-dev/exec",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "neoneo-cli-dev exec",
   "author": "liuning <liuning@kuaishou.com>",
   "homepage": "https://github.com/liuningfr/neoneo-cli-dev#readme",
@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "@neoneo-cli-dev/log": "^1.0.33",
-    "@neoneo-cli-dev/package": "^1.0.33"
+    "@neoneo-cli-dev/package": "^1.0.34"
   }
 }
