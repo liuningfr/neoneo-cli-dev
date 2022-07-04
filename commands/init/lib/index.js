@@ -159,7 +159,8 @@ class InitCommand extends Command {
                 log.notice('开始执行自定义模板');
                 const templatePath = path.resolve(this.templateNpm.cacheFilePath, 'template');
                 const options = {
-                    ...this.templateInfo,
+                    templateInfo: this.templateInfo,
+                    projectInfo: this.projectInfo,
                     targetPath: process.cwd(),
                     sourcePath: templatePath,
                 };
